@@ -17,29 +17,29 @@
 				est difficile de s'arrêter.
 			</p>
 
-			<section class="menu">
+			<section v-for="item in simpleMenu" class="menu">
 				<h2>Menu</h2>
 				<div class="menu-item">
 					<img
 						class="menu-item__image"
-						src="https://via.placeholder.com/300x150"
-						alt=""
+						v-bind:src="item.image.source"
+						v-bind:alt="item.image.alt"
 					/>
 					<div>
-						<h3>Nom de l'article</h3>
-						<p>En stock</p>
-						<p>En rupture de stock</p>
+						<h3> {{ item.name }}</h3>
+						<p v-if="item.inStock === true">En stock</p>
+						<p v-else-if="item.inStock === false">En rupture de stock</p>
 						<div>
 							<label for="add-item-quantity">Quantité :</label>
 							<input id="add-item-quantity" type="number" />
-							<button>Ajouter au panier d'achat</button>
+							<button @click="addToShoppingCart">Ajouter au panier d'achat</button>
 						</div>
 					</div>
 				</div>
 			</section>
 
 			<aside class="shopping-cart">
-				<h2>Panier d'achat: 0 articles</h2>
+				<h2>Panier d'achat: {{ addToShoppingCart() }} articles</h2>
 			</aside>
 
 			<h2>Contactez nous</h2>
@@ -95,7 +95,16 @@
 							inStock: false,
 							quantity: 1
 						}
-					]
+					],
+					totalBasket: 0
+				},
+				methods: {
+					addToShoppingCart() {
+						let addQte = document.getElementById('add-item-quantity').value;
+						return this.totalBasket + addQte
+						console.log(this.totalBasket);
+						
+					}
 				},
 				computed: {
 					copyright() {
